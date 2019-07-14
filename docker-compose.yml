@@ -1,0 +1,36 @@
+version: "3.3"
+
+services:
+
+  flask:
+    build: ./flask
+    container_name: flask
+    restart: always
+    environment:
+      - APP_NAME=vocabulario_backend
+      - DATABASE_URL=mysql+pymysql://<usuario-db>:<pass-bd>@<host>/<esquemabd>
+      - SECRET_KEY=<your-secret-key>
+    volumes:
+      - ./volumenes/flask:/home/uwsgi/logs
+    expose:
+      - 8080
+    ports:
+      - 8080:8080
+  
+  vocabulariodb:
+    image: mysql:5.7
+    container_name: vocabulariodb
+    environment:
+      - MYSQL_DATABASE=<esquema>
+      - MYSQL_ROOT_PASSWORD=<root-password>
+      - MYSQL_USER=<usuario-bd>
+      - MYSQL_PASSWORD=<pass-bd>
+    volumes:
+      # Montamos un volumen para MySQL para no perder los datos de bd
+      - ./volumenes/mysql:/var/lib/mysql
+    restart: always
+    expose:
+      - 3306
+    ports:
+      - 3306:3306
+ 
